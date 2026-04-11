@@ -1,0 +1,10 @@
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+TEAM_ID=
+PRODUCT_NAME=iosApp
+BUNDLE_ID=android.template.iosapp
+PRODUCT_BUNDLE_IDENTIFIER=$(BUNDLE_ID)
+
+// Primary path: populated by embedAndSignAppleFrameworkForXcode (AS KMP plugin / Xcode build phase)
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(SRCROOT)/../shared/app/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME) $(SRCROOT)/../shared/app/build/bin/iosSimulatorArm64/debugFramework $(SRCROOT)/../shared/app/build/bin/iosArm64/debugFramework

@@ -20,14 +20,29 @@ DATAMODEL=$2
 APPNAME=$3
 SUBDIR=${PACKAGE//.//} # Replaces . with /
 
-for n in $(find . -type d \( -path '*/src/androidTest' -or -path '*/src/main' -or -path '*/src/test' \) )
+for n in $(find . -type d \( \
+    -path '*/src/main' -or \
+    -path '*/src/androidTest' -or \
+    -path '*/src/test' -or \
+    -path '*/src/commonMain' -or \
+    -path '*/src/commonTest' -or \
+    -path '*/src/androidMain' -or \
+    -path '*/src/androidInstrumentedTest' -or \
+    -path '*/src/androidUnitTest' -or \
+    -path '*/src/iosMain' -or \
+    -path '*/src/iosArm64Main' -or \
+    -path '*/src/iosSimulatorArm64Main' -or \
+    -path '*/src/iosX64Main' \
+  \) )
 do
-  echo "Creating $n/kotlin/$SUBDIR"
-  mkdir -p $n/kotlin/$SUBDIR
-  echo "Moving files to $n/kotlin/$SUBDIR"
-  mv $n/kotlin/android/template/* $n/kotlin/$SUBDIR
-  echo "Removing old $n/kotlin/android/template"
-  rm -rf mv $n/kotlin/android
+  if [ -d "$n/kotlin/android/template" ]; then
+    echo "Creating $n/kotlin/$SUBDIR"
+    mkdir -p $n/kotlin/$SUBDIR
+    echo "Moving files to $n/kotlin/$SUBDIR"
+    mv $n/kotlin/android/template/* $n/kotlin/$SUBDIR
+    echo "Removing old $n/kotlin/android"
+    rm -rf $n/kotlin/android
+  fi
 done
 
 # Rename package and imports
@@ -37,6 +52,9 @@ find ./ -type f -name "*.kt" -exec sed -i.bak "s/import android.template/import 
 
 # Gradle files
 find ./ -type f -name "*.kts" -exec sed -i.bak "s/android.template/$PACKAGE/g" {} \;
+
+# Xcode config files
+find ./ -type f -name "*.xcconfig" -exec sed -i.bak "s/android\.template/$PACKAGE/g" {} \;
 
 # Rename model
 echo "Renaming model to $DATAMODEL"

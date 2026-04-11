@@ -1,8 +1,5 @@
-@Suppress("DSL_SCOPE_VIOLATION") // Remove when fixed https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    alias(libs.plugins.android.test)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
+    id("com.android.test")
 }
 
 android {
@@ -13,8 +10,7 @@ android {
     defaultConfig {
         minSdk = 23
         targetSdk = 36
-
-        testInstrumentationRunner = "android.template.core.testing.HiltTestRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
@@ -31,19 +27,16 @@ android {
 
 dependencies {
     implementation(project(":app"))
+    implementation(project(":shared:app"))
     implementation(project(":feature:mymodel:business"))
     implementation(project(":feature:mymodel:data"))
     implementation(project(":feature:mymodel:di"))
-    implementation(project(":core:testing"))
     implementation(project(":feature:mymodel:app"))
 
-    // Testing
     implementation(libs.androidx.test.core)
-
-    // Hilt and instrumented tests.
-    implementation(libs.hilt.android.testing)
-    ksp(libs.hilt.android.compiler)
-
-    // Compose
     implementation(libs.androidx.compose.ui.test.junit4)
+    implementation(libs.koin.android)
+    implementation(libs.koin.test)
+    implementation(libs.koin.test.junit4)
+    implementation(libs.mockk)
 }
